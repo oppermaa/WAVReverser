@@ -30,9 +30,10 @@ wav_file* reverse_wav_file(wav_file* file) {
     size_t data_size = file->size - 44;
     long int num_samples = (file->size - 44) / 8;
     
+    // Swap samples "symmetrically" (swap nth sample with nth-to-last sample)
     for (int i=0; i < num_samples/2; i++) {
-        
-        // Swap samples "symmetrically" (swap nth sample with nth-to-last sample)
+
+        // Sample swap logic
         char temp[8];
         for (int j=0; j<8; j++) {
             temp[j] = file->data[i*8 + j];
