@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "file_lib.h"
+#include "wav.h"
 
 /**
  * The contents of the file are a char*, but that doesn't
@@ -32,10 +33,16 @@ int main(int argc, char** argv){
     printf("%lu bytes read.\n", num_bytes);
 
     // Print the file contents in hex
-    print_file(contents, num_bytes);
+    // print_file(contents, num_bytes);
+
+    // Create header for file
+    // wav_header *header = create_header(contents, num_bytes);
+
+    // Create new WAV file
+    wav_file *file = create_wav_file(argv[1]);
 
     // Write the file to the output
-    write_file(argv[2], contents, num_bytes);
+    // write_file(argv[2], contents, num_bytes);
 
     free(contents); // Always free allocated memory
     return 0;
