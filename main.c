@@ -41,9 +41,16 @@ int main(int argc, char** argv){
     // Create new WAV file
     wav_file *file = create_wav_file(argv[1]);
 
+    // Save file to disk
+    save_to_disk(argv[2], file, num_bytes);
+
     // Write the file to the output
     // write_file(argv[2], contents, num_bytes);
 
-    free(contents); // Always free allocated memory
+    // Free all allocated memory
+    free(contents);
+    free(file->header);
+    free(file->data);
+    free(file);
     return 0;
 }

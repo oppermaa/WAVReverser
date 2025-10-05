@@ -140,4 +140,22 @@ wav_file* create_wav_file(char* path) {
     return file;
 }
 
-void save_to_disk();
+// Takes a path and wav file and saves the wav file at the specified path
+void save_to_disk(char* path, wav_file* file, size_t size) {
+    
+    // raw bytes file
+    char *data = malloc(size);
+    
+    // write header and data to file
+    memcpy(data, file->header, 44);
+    memcpy(data + 44, file->data, size - 44);
+
+    // save file contents to disk
+    if (write_file(path, data, size) < size) {
+        perror("Error writing file to disk");
+        free(data);
+        exit(1);
+    }
+
+    free(data);
+}

@@ -38,6 +38,6 @@ wav_header* create_header(char *, size_t);
 wav_file* create_wav_file(char *);
 
 // Given a WAV file and a path, writes it to the path
-void save_to_disk();
+void save_to_disk(char *, wav_file *, size_t);
 
 #endif
