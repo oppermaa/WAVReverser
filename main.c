@@ -24,33 +24,61 @@ void print_file(char* file_contents, size_t num_bytes){
     printf("\n");
 }
 
+// Reverses the data section of a wav file
+wav_file* reverse_wav_file(wav_file* file) {
+
+    size_t data_size = file->size - 44;
+    long int num_samples = (file->size - 44) / 8;
+    
+    for (int i=0; i < num_samples/2; i++) {
+        
+        // Swap samples "symmetrically" (swap nth sample with nth-to-last sample)
+        char temp[8];
+        for (int j=0; j<8; j++) {
+            temp[j] = file->data[i*8 + j];
+            file->data[i*8 + j] = file->data[data_size - (i*8 + j) - 1];
+            file->data[data_size - (i*8 + j) - 1] = temp[j];
+        }
+    }
+
+    return file;
+}
+
 int main(int argc, char** argv){
-    char* contents;
 
-    // Read the input file
-    size_t num_bytes = read_file(argv[1], &contents);
-    printf("%s\n", argv[1]);
-    printf("%lu bytes read.\n", num_bytes);
+    // Check for expected number of arguments
+    if (argc < 3) {
+        perror("Expected 2 file paths (source and destination)");
+        exit(1);
+    }
 
-    // Print the file contents in hex
-    // print_file(contents, num_bytes);
-
-    // Create header for file
-    // wav_header *header = create_header(contents, num_bytes);
+    // Check for source path existing
+    FILE *fd = fopen(argv[1], "r");
+    if (fd == NULL) {
+        perror("Source file not found");
+        exit(1);
+    }
+    fclose(fd);
 
     // Create new WAV file
     wav_file *file = create_wav_file(argv[1]);
 
-    // Save file to disk
-    save_to_disk(argv[2], file, num_bytes);
+    // Reverse wav file
+    file = reverse_wav_file(file);
 
-    // Write the file to the output
-    // write_file(argv[2], contents, num_bytes);
+    // Save file to disk
+    save_to_disk(argv[2], file, file->size);
+
+    // Display information
+    printf("Reversed \"%s\" --> \"%s\"\n\n", argv[1], argv[2]);
+    printf("Sample Rate: %ld\n", bytesToDecimal(file->header->sample_rate, 4));
+    printf("File Size: %ld\n", file->size);
+    printf("Number of Channels: %ld\n", bytesToDecimal(file->header->channels, 2));
 
     // Free all allocated memory
-    free(contents);
     free(file->header);
     free(file->data);
     free(file);
+
     return 0;
 }

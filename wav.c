@@ -118,10 +118,9 @@ wav_header* create_header(char* contents, size_t num_bytes) {
 
 // Takes a pathname, reads from the specified file, and creates a copied WAV file from it
 wav_file* create_wav_file(char* path) {
-    
-    char* contents;
 
     // Read the input file, set size of wav_file
+    char* contents;
     size_t num_bytes = read_file(path, &contents);
 
     // Allocate memory for wav_file, assign file size
@@ -136,6 +135,9 @@ wav_file* create_wav_file(char* path) {
     for (int i=44, j=0; i<num_bytes; i++, j++) {
         file->data[j] = contents[i];
     }
+
+    // Free memory
+    free(contents);
 
     return file;
 }
