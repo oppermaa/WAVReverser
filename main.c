@@ -71,9 +71,10 @@ int main(int argc, char** argv){
     save_to_disk(argv[2], file, file->size);
 
     // Display information
-    printf("Reversed \"%s\" --> \"%s\"\n\n", argv[1], argv[2]);
-    printf("Sample Rate: %ld\n", bytesToDecimal(file->header->sample_rate, 4));
-    printf("File Size: %ld\n", file->size);
+    printf("Input File: \"%s\"\n", argv[1]);
+    printf("Output File: \"%s\"\n", argv[2]);
+    printf("Sample Rate: %ld Hz\n", bytesToDecimal(file->header->sample_rate, 4));
+    printf("File Size: %ld bytes\n", file->size);
     printf("Number of Channels: %ld\n", bytesToDecimal(file->header->channels, 2));
 
     // Free all allocated memory
